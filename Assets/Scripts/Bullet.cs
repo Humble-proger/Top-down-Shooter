@@ -21,6 +21,11 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         BulletPool.Instance.PutItem(this);
+        if (collision.TryGetComponent(out IEnemy enemy))
+        {
+            enemy.TakeDamage(_damage);
+            Debug.Log("Damage");
+        }
     }
 
     public void Reset()
