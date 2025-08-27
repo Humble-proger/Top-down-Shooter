@@ -5,6 +5,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float _velocityBullet;
     [SerializeField] private float _damage;
     [SerializeField] private float _lifeTime;
+    [SerializeField] private float _radiusNoise;
+    [SerializeField] private LayerMask _layerMask;
 
     [HideInInspector] public float CurrentLifeTime = 0f;
 
@@ -24,7 +26,14 @@ public class Bullet : MonoBehaviour
         if (collision.TryGetComponent(out IEnemy enemy))
         {
             enemy.TakeDamage(_damage);
-            Debug.Log("Damage");
+        }
+        else {
+            Collider2D[] rayhit = Physics2D.OverlapCircleAll(transform.position, _radiusNoise);
+            foreach (var hit in rayhit) {
+                if (hit.TryGetComponent(out IEnemy enemyReflected)) {
+                    enemyReflected.Alert(transform.position);
+                }
+            }
         }
     }
 

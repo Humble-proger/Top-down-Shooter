@@ -11,6 +11,7 @@ public class StateMachine
         _currentState = newState;
         _currentState?.Enter();
     }
+    public string GetStateName() => _currentState.NameState;
     public void Update() 
     {
         _currentState?.Update();

@@ -114,6 +114,10 @@ MonoBehaviour:
   _velocityBullet: 20
   _damage: 50
   _lifeTime: 2
+  _radiusNoise: 10
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 51
   CurrentLifeTime: 0
 --- !u!1001 &1766969483084010450
 PrefabInstance:

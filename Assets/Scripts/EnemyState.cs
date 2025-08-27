@@ -3,6 +3,8 @@ public abstract class EnemyState<EnemyClass> : IState
     protected readonly EnemyClass _enemy;
     protected readonly StateMachine _stateMachine;
 
+    public abstract string NameState { get; }
+
     public EnemyState(EnemyClass enemy, StateMachine stateMachine)
     {
         _enemy = enemy;

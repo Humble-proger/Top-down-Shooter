@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6544868823423800201}
   - component: {fileID: 2031467060428264301}
   m_Layer: 0
-  m_Name: TankEnemy
+  m_Name: SimpleEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,9 +30,9 @@ Transform:
   m_GameObject: {fileID: 5019562180862552661}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -184,67 +184,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 749793ae466e42744b7decfbf5701498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextAttackTime: 0
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _takeDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  _spriteRenderer: {fileID: 3664497854972130286}
+  _durationAnimation: 0.5
+  _curveAnimation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.1414561
+      value: 0.7752542
+      inSlope: 0.30898732
+      outSlope: 0.30898732
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.9480925
+      outWeight: 0.44353795
+    - serializedVersion: 3
+      time: 1.0125122
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _typeEnemy: 0
   Player: {fileID: 0}
   PlayerHealth: {fileID: 0}
-  SpeedChaise: 5
-  SpeedPatrol: 2
-  VisibilityRange: 10
-  Damage: 20
-  Health: 100
-  AttackRange: 0.5
-  AttackCooldown: 3
-  PatrolPoints:
-  - {x: -17.03, y: 49.6}
-  - {x: -17.03, y: 44.62}
-  - {x: -17.03, y: 37.98}
-  - {x: -17.03, y: 28.62}
-  - {x: -6.22, y: 29.2}
-  - {x: 2.73, y: 27.71}
-  - {x: 10.65, y: 23.82}
-  - {x: 17.57, y: 20.34}
-  - {x: 26.57, y: 19.48}
-  - {x: 34.44, y: 19.48}
-  - {x: 38.24, y: 25.64}
-  - {x: 44.53, y: 36}
-  - {x: 51.36, y: 47.49}
-  - {x: 62.36, y: 47.49}
-  - {x: 62.36, y: 37.1}
-  - {x: 62.36, y: 25.95}
-  - {x: 62.36, y: 14.96}
-  - {x: 62.36, y: 4.47}
-  - {x: 62.36, y: -7.19}
-  - {x: 71.23, y: -12.41}
-  - {x: 77.41, y: -22.5}
-  - {x: 77.66, y: -31.98}
-  - {x: 71.88, y: -39.43}
-  - {x: 58.6, y: -43.69}
-  - {x: 45.17, y: -37.76}
-  - {x: 59.92, y: -25.4}
-  - {x: 40.21, y: -21.95}
-  - {x: 45.37, y: -13.59}
-  - {x: 50.03, y: -9.59}
-  - {x: 46.69, y: -2.24}
-  - {x: 40.36, y: -0.01}
-  - {x: 34.68, y: 2.42}
-  - {x: 28.95, y: 7.29}
-  - {x: 23.93, y: -3.36}
-  - {x: 19.72, y: -11.72}
-  - {x: 16.93, y: -20.14}
-  - {x: 7.15, y: -19.53}
-  - {x: -3.75, y: -18.67}
-  - {x: -17.03, y: -17.4}
-  - {x: -21.89, y: -26.17}
-  - {x: -24.27, y: -32.3}
-  - {x: -9.02, y: -33.31}
-  - {x: 4.16, y: -32.45}
-  - {x: 15.16, y: -35.19}
-  - {x: 28.29, y: -39.75}
-  - {x: 36.7, y: -39.6}
-  - {x: -31.06, y: -44.56}
-  - {x: -17.03, y: 13.26}
-  - {x: -17.03, y: -3.62}
-  - {x: -62.24, y: 1.08}
-  - {x: -52.99, y: 1.8}
-  - {x: -25.01, y: 13.04}
-  - {x: -21.96, y: 24.12}
+  NextAttackTime: 0
+  Walk: 765711723
+  Animator: {fileID: 1728171143026706535}
+  EnemyProperty: {fileID: 0}
