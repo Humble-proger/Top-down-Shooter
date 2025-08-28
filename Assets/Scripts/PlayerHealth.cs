@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float _maxHealth;
+    
 
     public float _currentHealth;
 
     public event Action<float> ChangeHealth;
     public event Action Death;
+    public float MaxHealth;
 
     private void Awake()
     {
-        _currentHealth = _maxHealth;
+        _currentHealth = MaxHealth;
     }
 
     public void TakeDamage(float damage) {

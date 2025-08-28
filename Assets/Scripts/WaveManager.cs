@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -16,9 +17,10 @@ public class WaveManager : MonoBehaviour
     private int _enemiesAlive = 0;
 
     [HideInInspector]
-    public string WaveName = "Wave 1";
-    [HideInInspector]
     public static WaveManager Instance { get; private set; }
+
+    public event Action<int> ChangeEnemyCount;
+    public event Action<int> ChangeWave;
 
     private void Awake()
     {
@@ -43,13 +45,13 @@ public class WaveManager : MonoBehaviour
         while (true)
         {
             _currentWave++;
-            WaveName = $"Wave {_currentWave}";
+            ChangeWave?.Invoke(_currentWave);
             baseEnemies = 1 + (_currentWave * 2);
             enemyCount = Mathf.FloorToInt(baseEnemies * (int)_difficulty);
 
             foreach (TypeEnemy ememyType in GenerateEnemiesForWave(enemyCount)) {
                 SpawnEnemy(ememyType);
-                yield return new WaitForSeconds(Random.Range(0.5f, 2f));
+                yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 2f));
             }
             yield return new WaitUntil(() => _enemiesAlive == 0);
             yield return new WaitForSeconds(_timeBetweenWaves);
@@ -59,8 +61,9 @@ public class WaveManager : MonoBehaviour
     private void SpawnEnemy(TypeEnemy enemy)
     {
         Vector2 point = GetSpawnPointAwayPlayer();
-        GameObject enemyObject = _enemyPool.GetItem(enemy, point);
+        _enemyPool.GetItem(enemy, point);
         _enemiesAlive++;
+        ChangeEnemyCount?.Invoke(_enemiesAlive);
     }
 
     private IEnumerable GenerateEnemiesForWave(int enemyCount)
@@ -80,13 +83,14 @@ public class WaveManager : MonoBehaviour
     }
 
     private Vector2 GetRandomSpawnPointAwayPlayer() {
-        return _spawnPoints[Random.Range(0, _spawnPoints.Length)];
+        return _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length)];
     }
 
     public void OnEnemyDied(TypeEnemy typeEnemy, GameObject enemy) 
     {
         _enemyPool.PutItem(enemy, typeEnemy);
         _enemiesAlive--;
+        ChangeEnemyCount?.Invoke(_enemiesAlive);
     }
     private void OnDrawGizmos()
     {
