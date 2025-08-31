@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    
-
     public float _currentHealth;
 
     public event Action<float> ChangeHealth;
@@ -22,7 +20,14 @@ public class PlayerHealth : MonoBehaviour
         {
             Death?.Invoke();
             _currentHealth = 0f;
+            return;
         }
+        ChangeHealth?.Invoke(_currentHealth);
+    }
+
+    public void Reset()
+    {
+        _currentHealth = MaxHealth;
         ChangeHealth?.Invoke(_currentHealth);
     }
 }

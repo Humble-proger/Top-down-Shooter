@@ -7,7 +7,6 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private EnemyPool _enemyPool;
     [SerializeField] private EnemySpawnManager _enemySpawnManager;
     [SerializeField] private float _timeBetweenWaves = 10f;
-    [SerializeField] private Difficulty _difficulty;
     [SerializeField] private Vector2[] _spawnPoints;
     [SerializeField] private float _radiusPlayer;
     [SerializeField] private Transform _player;
@@ -18,9 +17,14 @@ public class WaveManager : MonoBehaviour
 
     [HideInInspector]
     public static WaveManager Instance { get; private set; }
-
+    [HideInInspector]
+    public bool ActiveGenerator = false;
+    
     public event Action<int> ChangeEnemyCount;
     public event Action<int> ChangeWave;
+
+    public Difficulty Difficulty { get; set; }
+
 
     private void Awake()
     {
@@ -33,7 +37,7 @@ public class WaveManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    public void Start()
     {
         StartCoroutine(WaveSpawner());
     }
@@ -44,17 +48,23 @@ public class WaveManager : MonoBehaviour
         int baseEnemies, enemyCount;
         while (true)
         {
+            yield return new WaitUntil(() => ActiveGenerator);
             _currentWave++;
+            Debug.Log($"Increse Wave: {_currentWave}");
             ChangeWave?.Invoke(_currentWave);
             baseEnemies = 1 + (_currentWave * 2);
-            enemyCount = Mathf.FloorToInt(baseEnemies * (int)_difficulty);
+            enemyCount = Mathf.FloorToInt(baseEnemies * (int)Difficulty);
 
-            foreach (TypeEnemy ememyType in GenerateEnemiesForWave(enemyCount)) {
-                SpawnEnemy(ememyType);
-                yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 2f));
+            IEnumerator enumerator = GenerateEnemiesForWave(enemyCount).GetEnumerator();
+            while (enumerator.MoveNext() && ActiveGenerator) {
+                if (enumerator.Current is TypeEnemy type) {
+                    SpawnEnemy(type);
+                    yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 2f));
+                }
             }
             yield return new WaitUntil(() => _enemiesAlive == 0);
-            yield return new WaitForSeconds(_timeBetweenWaves);
+            if (ActiveGenerator)
+                yield return new WaitForSeconds(_timeBetweenWaves);
         }
     }
 
@@ -76,7 +86,6 @@ public class WaveManager : MonoBehaviour
     private Vector2 GetSpawnPointAwayPlayer()
     {
         Vector2 point = GetRandomSpawnPointAwayPlayer();
-        Debug.Log(point);
         if (Vector2.Distance(point, _player.position) >= _radiusPlayer)
             return point;
         return GetSpawnPointAwayPlayer();
@@ -92,11 +101,13 @@ public class WaveManager : MonoBehaviour
         _enemiesAlive--;
         ChangeEnemyCount?.Invoke(_enemiesAlive);
     }
-    private void OnDrawGizmos()
+
+    public void Reset()
     {
-        Gizmos.color = Color.red;
-        foreach (var point in _spawnPoints) {
-            Gizmos.DrawSphere(point, 0.5f);
-        }
+        _currentWave = 0;
+        _enemiesAlive = 0;
+        ChangeEnemyCount?.Invoke(_enemiesAlive);
+        ChangeWave?.Invoke(_currentWave);
+        _enemyPool.Reset();
     }
 }

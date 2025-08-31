@@ -9,6 +9,7 @@ public class PlayerMover : MonoBehaviour
     private Vector2 _movement;
     private Rigidbody2D _rb;
     private bool _isRunning = false;
+    private Vector3 _startPosition;
 
     public event Action<bool> IsRunning;
 
@@ -16,6 +17,7 @@ public class PlayerMover : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        _startPosition = transform.position;
     }
 
     private void Update()
@@ -42,5 +44,10 @@ public class PlayerMover : MonoBehaviour
             IsRunning?.Invoke(true);
             _isRunning = true;
         }
+    }
+    public void Reset()
+    {
+        _rb.position = _startPosition;
+        _isRunning = false;
     }
 }
